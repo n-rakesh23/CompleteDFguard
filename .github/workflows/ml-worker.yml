@@ -1,0 +1,53 @@
+name: ML Worker CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dfguard/ml-worker/**'
+      - '.github/workflows/ml-worker.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'dfguard/ml-worker/**'
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: dfguard/ml-worker/requirements.txt
+
+      - name: Install dependencies
+        working-directory: dfguard/ml-worker
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        working-directory: dfguard/ml-worker
+        run: |
+          # Stop build on syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Warn on style issues (non-blocking)
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Run tests
+        working-directory: dfguard/ml-worker
+        run: |
+          if [ -f pytest.ini ] || [ -f setup.py ] || [ -d tests ]; then
+            pip install pytest
+            pytest --tb=short
+          else
+            echo "No test suite found — skipping"
+          fi
