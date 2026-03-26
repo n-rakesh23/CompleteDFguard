@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"C:/Users/Admin/OneDrive/Desktop/newap/dfguard-complete \\(1\\)/dfguard\" -type f)"
+    ]
+  }
+}
