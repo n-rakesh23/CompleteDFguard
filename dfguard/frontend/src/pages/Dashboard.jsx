@@ -79,10 +79,15 @@ export default function Dashboard() {
     }
   };
 
-  const handleDelete = async (jobId) => {
+  const handleDelete = async (jobId, status) => {
     try {
-      await deleteJob(jobId);
-      toast.success('Job deleted.');
+      const data = await deleteJob(jobId);
+      if (data?.refunded) {
+        await refetchCredits();
+        toast.success('Job removed. 10 credits refunded!');
+      } else {
+        toast.success('Job deleted.');
+      }
     } catch {
       toast.error('Could not delete job.');
     }

@@ -1,4 +1,4 @@
-import { Download, Clock, CheckCircle, XCircle, Loader2, Trash2, ShieldCheck } from 'lucide-react';
+import { Download, Clock, CheckCircle, XCircle, Loader2, Trash2, ShieldCheck, X } from 'lucide-react';
 
 const statusConfig = {
   queued:     { color: 'text-yellow-400',  bg: 'bg-yellow-400/10',  border: 'border-yellow-400/20',  icon: Clock,        label: 'Queued'     },
@@ -51,13 +51,24 @@ function JobCard({ job, onDelete }) {
               <Download className="w-4 h-4 text-white" />
             </a>
             <button
-              onClick={() => onDelete(job._id)}
+              onClick={() => onDelete(job._id, job.status)}
               className="p-2.5 sm:p-3 rounded-xl bg-red-500/20 border border-red-500/30 hover:scale-110 transition-transform touch-manipulation"
               title="Delete job"
             >
               <Trash2 className="w-4 h-4 text-red-400" />
             </button>
           </div>
+        )}
+
+        {/* Remove from queue button — only for queued jobs */}
+        {job.status === 'queued' && (
+          <button
+            onClick={() => onDelete(job._id, job.status)}
+            className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 border border-white/10 hover:bg-red-500/20 hover:border-red-500/30 transition-all touch-manipulation"
+            title="Remove from queue (refunds 10 credits)"
+          >
+            <X className="w-3 h-3 text-slate-400 hover:text-red-400" />
+          </button>
         )}
 
         {/* Status pill overlay */}

@@ -158,7 +158,7 @@ const getJob = async (req, res, next) => {
 
 /**
  * DELETE /api/jobs/:id
- * Delete a job record (not the S3 files — lifecycle handles that)
+ * Delete a job record. Refunds 10 credits if job was still queued.
  */
 const deleteJob = async (req, res, next) => {
     try {
@@ -171,7 +171,15 @@ const deleteJob = async (req, res, next) => {
             return res.status(404).json({ error: 'Job not found.' });
         }
 
-        res.json({ message: 'Job deleted.' });
+        // Refund credits if job was queued (never processed)
+        if (job.status === 'queued' && req.user.plan !== 'pro') {
+            await Credit.findOneAndUpdate(
+                { userId: req.user._id },
+                { $inc: { balance: 10 } }
+            );
+        }
+
+        res.json({ message: 'Job deleted.', refunded: job.status === 'queued' });
     } catch (err) {
         next(err);
     }

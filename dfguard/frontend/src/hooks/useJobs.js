@@ -64,8 +64,9 @@ export function useJobs() {
   }, [fetchJobs]);
 
   const deleteJob = useCallback(async (jobId) => {
-    await api.delete(`/api/jobs/${jobId}`);
+    const { data } = await api.delete(`/api/jobs/${jobId}`);
     setJobs(prev => prev.filter(j => j._id !== jobId));
+    return data;
   }, []);
 
   return {
