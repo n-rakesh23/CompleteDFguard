@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
         enum:    ['free', 'pro'],
         default: 'free'
     },
+    isAdmin: {
+        type:    Boolean,
+        default: false
+    },
     isEmailVerified: {
         type:    Boolean,
         default: false

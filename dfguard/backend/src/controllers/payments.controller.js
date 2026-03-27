@@ -9,15 +9,24 @@ const { getSecret } = require('../services/secrets.service');
  * POST /api/payments/create-order
  * Creates a Razorpay order and returns orderId to frontend
  */
+const PLAN_AMOUNTS = {
+    monthly:   9900,   // ₹99
+    sixMonths: 49900,  // ₹499
+    lifetime:  199900  // ₹1,999
+};
+
 const createOrder = async (req, res, next) => {
     try {
+        const planType = req.body.planType || 'lifetime';
+        const amount   = PLAN_AMOUNTS[planType] || PLAN_AMOUNTS.lifetime;
+
         const keyId     = await getSecret('dfguard/razorpay/key_id');
         const keySecret = await getSecret('dfguard/razorpay/key_secret');
 
         const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
 
         const order = await razorpay.orders.create({
-            amount:   149900,   // ₹1499 in paise
+            amount,
             currency: 'INR',
             receipt:  `rcpt_${req.user._id}_${Date.now()}`
         });
@@ -26,7 +35,7 @@ const createOrder = async (req, res, next) => {
         await Payment.create({
             userId:          req.user._id,
             razorpayOrderId: order.id,
-            amount:          149900,
+            amount,
             status:          'created'
         });
 
@@ -34,7 +43,7 @@ const createOrder = async (req, res, next) => {
             orderId:  order.id,
             amount:   order.amount,
             currency: order.currency,
-            keyId                       // Safe to expose key_id (not key_secret)
+            keyId
         });
 
     } catch (err) {

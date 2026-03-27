@@ -8,8 +8,8 @@ import Button                   from '../components/ui/Button';
 import Navbar                   from '../components/layout/Navbar';
 
 export default function Signup() {
-  const { register, confirmEmail } = useAuth();
-  const navigate                   = useNavigate();
+  const { register, confirmEmail, login } = useAuth();
+  const navigate                          = useNavigate();
 
   const [step,    setStep]    = useState('register');
   const [form,    setForm]    = useState({ fullName: '', email: '', password: '', confirm: '' });
@@ -57,8 +57,14 @@ export default function Signup() {
     setErrors({});
     try {
       await confirmEmail(form.email.trim(), code.trim());
-      toast.success('Email verified! Please log in.');
-      navigate('/login');
+      try {
+        await login(form.email.trim(), form.password);
+        toast.success('Welcome! Your account is ready.');
+        navigate('/dashboard');
+      } catch {
+        toast.success('Email verified! Please log in.');
+        navigate('/login');
+      }
     } catch {
       setErrors({ code: 'Invalid or expired code. Please try again.' });
     } finally {
@@ -89,11 +95,11 @@ export default function Signup() {
             }
           </div>
           <h1 className="text-2xl sm:text-3xl font-display font-bold mb-2">
-            {step === 'register' ? 'Deploy Shield' : 'Verify Identity'}
+            {step === 'register' ? 'Create Account' : 'Verify Your Email'}
           </h1>
           <p className="text-slate-500 text-xs sm:text-sm px-4">
             {step === 'register'
-              ? 'Initialize your encrypted identity vault.'
+              ? 'Sign up free — no credit card required.'
               : `Enter the 6-digit code sent to ${form.email}`}
           </p>
         </div>
@@ -170,7 +176,7 @@ export default function Signup() {
                 autoComplete="new-password"
               />
               <Button type="submit" loading={loading} className="w-full rounded-xl mt-2 gap-2" size="lg">
-                Deploy Architecture
+                Create Account
                 {!loading && <ArrowRight className="w-4 h-4" />}
               </Button>
             </form>
@@ -196,7 +202,7 @@ export default function Signup() {
                 className="text-center text-xl tracking-[0.5em] font-bold mono"
               />
               <Button type="submit" loading={loading} className="w-full rounded-xl mt-2" size="lg">
-                Verify & Activate
+                Verify Email
               </Button>
               <button
                 type="button"
@@ -210,7 +216,7 @@ export default function Signup() {
         </div>
 
         <p className="text-center text-sm mt-5 md:mt-6 text-slate-500">
-          Already have a vault?{' '}
+          Already have an account?{' '}
           <Link to="/login" className="text-brand-cyan font-bold hover:text-cyan-300 transition-colors">
             Log In
           </Link>
