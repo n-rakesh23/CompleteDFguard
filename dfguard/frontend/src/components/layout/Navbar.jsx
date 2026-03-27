@@ -208,7 +208,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className="ai-gradient-bg w-full text-center py-3 rounded-full font-bold text-sm"
               >
-                Enter Vault
+                Go to Dashboard
               </Link>
               <Link
                 to="/profile"

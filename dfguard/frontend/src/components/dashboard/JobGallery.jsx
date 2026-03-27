@@ -14,7 +14,7 @@ function JobCard({ job, onDelete, onRetry }) {
 
   return (
     <div
-      className="rounded-xl sm:rounded-2xl overflow-hidden group relative animate-fade-up transition-all duration-300 hover:-translate-y-0.5"
+      className="rounded-xl sm:rounded-2xl overflow-hidden group relative animate-fade-up transition-all duration-300 card-3d"
       style={{
         background: 'rgba(10,15,30,0.8)',
         border: '1px solid rgba(255,255,255,0.06)',

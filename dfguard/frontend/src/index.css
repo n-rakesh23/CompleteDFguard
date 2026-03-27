@@ -98,18 +98,36 @@
     box-shadow:
       0 0 0 1px rgba(34,211,238,0.04),
       0 4px 32px rgba(0,0,0,0.4),
+      0 8px 16px rgba(0,0,0,0.3),
       inset 0 1px 0 rgba(255,255,255,0.04);
     backdrop-filter: blur(20px);
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+    transform: perspective(1000px) translateZ(0);
   }
 
   .neon-card:hover {
     border-color: rgba(34,211,238,0.25);
     box-shadow:
-      0 0 24px rgba(34,211,238,0.06),
-      0 8px 40px rgba(0,0,0,0.5),
+      0 0 24px rgba(34,211,238,0.08),
+      0 16px 48px rgba(0,0,0,0.5),
+      0 24px 32px rgba(0,0,0,0.2),
       inset 0 1px 0 rgba(255,255,255,0.06);
-    transform: translateY(-2px);
+    transform: perspective(1000px) translateZ(8px) translateY(-4px);
+  }
+
+  /* 3D card lift — used on feature cards, pricing cards */
+  .card-3d {
+    transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+    transform: perspective(800px) translateZ(0) rotateX(0deg);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  .card-3d:hover {
+    transform: perspective(800px) translateZ(12px) rotateX(-2deg) translateY(-4px);
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.5),
+      0 0 30px rgba(34,211,238,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.06);
   }
 
   /* Feature icon wrapper */

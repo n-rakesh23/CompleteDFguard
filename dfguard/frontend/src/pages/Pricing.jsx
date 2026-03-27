@@ -29,7 +29,7 @@ export default function Pricing() {
         amount,
         currency,
         name:        'DFGuard',
-        description: 'Lifetime Pro Guardian Access',
+        description: 'Lifetime Pro Access',
         image:       'https://api.dicebear.com/7.x/shapes/svg?seed=Guard',
         order_id:    orderId,
         handler: async (response) => {
@@ -70,10 +70,10 @@ export default function Pricing() {
       <header className="relative pt-28 sm:pt-36 md:pt-48 pb-8 md:pb-12 px-4 sm:px-6 text-center z-10 animate-fade-up">
         <p className="text-brand-violet text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] mb-3 mono">// choose your plan</p>
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold mb-3 md:mb-4 tracking-tight">
-          Choose Your <span className="text-gradient">Vault</span>
+          Choose Your <span className="text-gradient">Plan</span>
         </h1>
         <p className="text-slate-500 text-xs sm:text-sm max-w-xs mx-auto leading-relaxed">
-          Select the compute tier that matches your security requirements.
+          Simple pricing. No hidden fees. Cancel anytime.
         </p>
       </header>
 
@@ -82,7 +82,7 @@ export default function Pricing() {
 
           {/* Free Plan */}
           <div
-            className="p-6 sm:p-8 md:p-10 rounded-[24px] md:rounded-[32px] flex flex-col transition-all duration-300"
+            className="p-6 sm:p-8 md:p-10 rounded-[24px] md:rounded-[32px] flex flex-col transition-all duration-300 card-3d"
             style={{
               background: 'rgba(10,15,30,0.7)',
               border: '1px solid rgba(255,255,255,0.07)',
@@ -93,9 +93,9 @@ export default function Pricing() {
               <div className="w-9 h-9 rounded-xl icon-glow-cyan flex items-center justify-center">
                 <Shield className="w-4 h-4 text-brand-cyan" />
               </div>
-              <h3 className="text-lg sm:text-xl font-display font-bold text-white">Basic Guardian</h3>
+              <h3 className="text-lg sm:text-xl font-display font-bold text-white">Free Plan</h3>
             </div>
-            <p className="text-slate-500 text-xs mb-5 md:mb-6 ml-12">30 daily credits. Refreshes every 24 hours.</p>
+            <p className="text-slate-500 text-xs mb-5 md:mb-6 ml-12">30 free credits every day. Resets every 24 hours.</p>
 
             <div className="mb-5 md:mb-6">
               <span className="text-3xl sm:text-4xl font-display font-bold text-white">₹0</span>
@@ -103,7 +103,7 @@ export default function Pricing() {
             </div>
 
             <Button variant="outline" onClick={handleFreePlan} className="mb-6 md:mb-8 rounded-xl w-full" size="lg">
-              Deploy Free Vault
+              Get Started Free
             </Button>
 
             <ul className="space-y-3 text-xs sm:text-sm text-slate-400 mt-auto">
@@ -137,9 +137,9 @@ export default function Pricing() {
                 <div className="w-9 h-9 rounded-xl icon-glow-violet flex items-center justify-center">
                   <Zap className="w-4 h-4 text-brand-violet" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-display font-bold text-gradient">Pro Guardian</h3>
+                <h3 className="text-lg sm:text-xl font-display font-bold text-gradient">Pro Plan</h3>
               </div>
-              <p className="text-slate-400 text-xs mb-5 md:mb-6 ml-12 relative z-10">Unlimited neural compute. One-time payment.</p>
+              <p className="text-slate-400 text-xs mb-5 md:mb-6 ml-12 relative z-10">Unlimited protection. Pay once, use forever.</p>
 
               <div className="mb-5 md:mb-6 relative z-10">
                 <span className="text-3xl sm:text-4xl font-display font-bold text-white">₹1,499</span>
@@ -156,7 +156,7 @@ export default function Pricing() {
               </Button>
 
               <ul className="space-y-3 text-xs sm:text-sm text-slate-300 relative z-10 mt-auto">
-                {['Unlimited Credits Forever', 'Neural Scrambling V2', 'Priority GPU Processing', 'Email Alerts on Breaches', 'Priority Support'].map(f => (
+                {['Unlimited Credits Forever', 'Advanced Photo Protection', 'Priority Processing', 'Email Alerts on Breaches', 'Priority Support'].map(f => (
                   <li key={f} className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded-full bg-brand-violet/10 border border-brand-violet/20 flex items-center justify-center flex-shrink-0">
                       <Check className="text-brand-violet w-3 h-3" />

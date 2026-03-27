@@ -21,7 +21,7 @@ export default function Home() {
         <div className="animate-fade-up max-w-4xl mx-auto">
           <div className="cyber-badge mb-6 md:mb-8 mx-auto w-fit text-[10px] sm:text-[11px]">
             <Zap className="w-3 h-3 text-brand-cyan" />
-            Neural Shield v2.0 — Active
+            AI Protection v2.0 — Active
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-5 md:mb-6 leading-[1.05] tracking-tight">
@@ -30,8 +30,8 @@ export default function Home() {
           </h1>
 
           <p className="text-slate-400 text-sm sm:text-base md:text-xl max-w-xl md:max-w-2xl mx-auto mb-8 md:mb-12 leading-relaxed px-2">
-            Inject adversarial cryptographic noise into your photos. Invisible to humans —
-            <span className="text-brand-cyan font-medium"> lethal to AI scrapers.</span>
+            Add an invisible layer of protection to your photos. Looks the same to you —
+            <span className="text-brand-cyan font-medium"> blocks AI from recognizing your face.</span>
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 md:mb-16">
@@ -52,9 +52,9 @@ export default function Home() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 md:gap-16 text-center max-w-lg md:max-w-none mx-auto">
             {[
-              { value: '99.8%',   label: 'Scraper Defeat' },
-              { value: '<0.1%',   label: 'Visual Change'  },
-              { value: '40-step', label: 'PGD Engine'     },
+              { value: '99.8%',   label: 'Success Rate'      },
+              { value: '<0.1%',   label: 'Visual Change'    },
+              { value: '40-step', label: 'Protection Steps' },
             ].map((s, i) => (
               <div key={i}>
                 <p className="text-xl sm:text-2xl md:text-3xl font-display font-bold text-gradient-subtle">{s.value}</p>
@@ -70,10 +70,10 @@ export default function Home() {
         <div className="text-center mb-10 md:mb-16">
           <p className="text-brand-cyan text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] mb-3 mono">// how it works</p>
           <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-white mb-4">
-            The Neural Vault Process
+            How It Works
           </h2>
           <p className="text-slate-500 text-xs sm:text-sm max-w-md mx-auto leading-relaxed px-4">
-            Three steps to render your biometric data mathematically immune to AI scraping.
+            Three simple steps to stop AI from scraping and using your photos.
           </p>
         </div>
 
@@ -81,11 +81,11 @@ export default function Home() {
           <div className="hidden sm:block absolute top-1/2 left-[16.67%] right-[16.67%] h-px bg-gradient-to-r from-brand-cyan/20 via-brand-violet/30 to-brand-pink/20 -translate-y-8 z-0" />
 
           {[
-            { icon: Upload,      iconClass: 'icon-glow-cyan',   iconColor: 'text-brand-cyan',   step: '01', title: 'Ingest',   desc: 'Upload your image securely. Travels encrypted directly to your private compute environment.' },
-            { icon: Zap,         iconClass: 'icon-glow-violet', iconColor: 'text-brand-violet', step: '02', title: 'Scramble', desc: 'Our 40-step PGD engine injects adversarial noise, destroying all AI recognition mapping.', scan: true },
-            { icon: ShieldCheck, iconClass: 'icon-glow-pink',   iconColor: 'text-brand-pink',   step: '03', title: 'Immunize', desc: 'Receive your visually identical, AI-immune image. Protected against all current scrapers.' },
+            { icon: Upload,      iconClass: 'icon-glow-cyan',   iconColor: 'text-brand-cyan',   step: '01', title: 'Upload',   desc: 'Upload your photo securely. It goes directly to your private, encrypted storage.' },
+            { icon: Zap,         iconClass: 'icon-glow-violet', iconColor: 'text-brand-violet', step: '02', title: 'Protect',  desc: 'Our AI engine adds an invisible shield to your photo, making your face unreadable to AI systems.', scan: true },
+            { icon: ShieldCheck, iconClass: 'icon-glow-pink',   iconColor: 'text-brand-pink',   step: '03', title: 'Download', desc: 'Get your protected photo. It looks exactly the same, but AI cannot recognize your face in it.' },
           ].map((step, i) => (
-            <div key={i} className="neon-card rounded-2xl sm:rounded-[28px] p-6 md:p-8 text-center relative overflow-hidden z-10">
+            <div key={i} className="neon-card card-3d rounded-2xl sm:rounded-[28px] p-6 md:p-8 text-center relative overflow-hidden z-10">
               {step.scan && <div className="scan-line opacity-30" />}
               <p className="mono text-[10px] text-slate-600 font-bold mb-4 sm:mb-6 uppercase tracking-[0.2em]">Step {step.step}</p>
               <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl ${step.iconClass} flex items-center justify-center mx-auto mb-4 md:mb-5`}>
@@ -103,9 +103,9 @@ export default function Home() {
         <div className="neon-card rounded-2xl md:rounded-[32px] p-6 md:p-10 lg:p-12">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
             {[
-              { icon: Lock,  color: 'text-brand-cyan',   label: 'End-to-End Encrypted',   desc: 'Your images never touch an unencrypted server.' },
-              { icon: Zap,   color: 'text-brand-violet', label: 'GPU-Accelerated Engine',  desc: 'PyTorch on NVIDIA GPUs — results in under 3 minutes.' },
-              { icon: Cpu,   color: 'text-brand-pink',   label: 'FaceNet-Targeted Attack', desc: 'Crafted to defeat VGGFace2-trained recognition models.' },
+              { icon: Lock,  color: 'text-brand-cyan',   label: 'End-to-End Encrypted',      desc: 'Your photos never pass through an unencrypted server.' },
+              { icon: Zap,   color: 'text-brand-violet', label: 'Fast GPU Processing',        desc: 'Runs on high-speed graphics cards — results in under 3 minutes.' },
+              { icon: Cpu,   color: 'text-brand-pink',   label: 'Face Recognition Blocker',   desc: 'Built to stop the most widely used face recognition systems.' },
             ].map((f, i) => (
               <div key={i} className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center bg-white/5 border border-white/10">
@@ -132,12 +132,12 @@ export default function Home() {
           <span className="text-gradient">real protection.</span>
         </h2>
         <p className="text-slate-500 text-xs sm:text-sm mb-8 md:mb-10 leading-relaxed px-4">
-          30 free credits daily. Upgrade to Pro for unlimited shields with one-time payment.
+          30 free credits every day. Upgrade to Pro for unlimited protection with a one-time payment.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
           <Link to="/signup" className="w-full sm:w-auto">
             <Button size="lg" className="rounded-full px-8 md:px-12 gap-2 w-full sm:w-auto">
-              Deploy Your Shield <ArrowRight className="w-4 h-4" />
+              Start Protecting Free <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
           <Link to="/pricing" className="w-full sm:w-auto">

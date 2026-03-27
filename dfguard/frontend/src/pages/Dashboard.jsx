@@ -74,7 +74,7 @@ export default function Dashboard() {
       }
       await uploadImage(file);
       await refetchCredits();
-      toast.success('Image queued for neural protection!');
+      toast.success('Photo sent for protection!');
     } catch (err) {
       if (err.status === 402) {
         toast.error('Insufficient credits.');
@@ -103,7 +103,7 @@ export default function Dashboard() {
     try {
       await retryJob(jobId);
       await refetchCredits();
-      toast.success('Job re-queued for processing!');
+      toast.success('Photo queued for retry!');
     } catch (err) {
       if (err.status === 402) {
         toast.error('Insufficient credits to retry.');
@@ -130,7 +130,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-2 mb-2 md:mb-3">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
               <span className="text-[10px] sm:text-[11px] text-emerald-400 font-bold uppercase tracking-[0.15em] mono truncate">
-                Vault Active
+                Protection Active
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-1 md:mb-2">
@@ -162,7 +162,7 @@ export default function Dashboard() {
               )}
             </h1>
             <p className="text-slate-500 text-xs sm:text-sm max-w-md leading-relaxed">
-              Upload media to inject adversarial noise. Each protection costs 10 credits.
+              Upload a photo to add AI protection. Each photo costs 10 credits.
             </p>
           </div>
 

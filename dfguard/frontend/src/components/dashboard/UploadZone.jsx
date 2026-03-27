@@ -57,7 +57,7 @@ export default function UploadZone({ onUpload, uploading }) {
         <div className="flex flex-col items-center gap-3 sm:gap-4">
           <Spinner size="lg" />
           <p className="text-xs text-slate-400 uppercase tracking-widest font-bold animate-pulse mono">
-            Uploading & Queueing...
+            Uploading...
           </p>
         </div>
       ) : (
@@ -66,7 +66,7 @@ export default function UploadZone({ onUpload, uploading }) {
             <ShieldPlus className="text-white w-7 h-7 sm:w-8 sm:h-8" />
           </div>
           <div>
-            <h3 className="font-display font-bold text-white text-base sm:text-lg">Protect Asset</h3>
+            <h3 className="font-display font-bold text-white text-base sm:text-lg">Protect Your Photo</h3>
             <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
               Click or drag &amp; drop an image
             </p>
