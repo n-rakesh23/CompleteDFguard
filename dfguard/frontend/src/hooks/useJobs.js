@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../lib/api';
 import { useAuth } from './useAuth';
 
@@ -8,19 +8,43 @@ export function useJobs() {
   const [loading,    setLoading]    = useState(true);
   const [error,      setError]      = useState(null);
   const [uploading,  setUploading]  = useState(false);
+  const prevJobsRef = useRef({});
+
+  const showNotification = useCallback((job) => {
+    if (Notification.permission !== 'granted') return;
+    new Notification('DFGuard — Image Protected!', {
+      body: 'Your image has been successfully protected. Ready to download.',
+      icon: '/vite.svg'
+    });
+  }, []);
 
   const fetchJobs = useCallback(async () => {
     if (!isAuthenticated) return;
     try {
       const { data } = await api.get('/api/jobs');
-      setJobs(data.jobs || []);
+      const newJobs  = data.jobs || [];
+
+      // Check for newly completed jobs and notify
+      newJobs.forEach(job => {
+        const prev = prevJobsRef.current[job._id];
+        if (job.status === 'completed' && prev && prev !== 'completed') {
+          showNotification(job);
+        }
+      });
+
+      // Update ref with current statuses
+      const statusMap = {};
+      newJobs.forEach(j => { statusMap[j._id] = j.status; });
+      prevJobsRef.current = statusMap;
+
+      setJobs(newJobs);
       setError(null);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, showNotification]);
 
   useEffect(() => {
     fetchJobs();
@@ -69,8 +93,14 @@ export function useJobs() {
     return data;
   }, []);
 
+  const retryJobFn = useCallback(async (jobId) => {
+    const { data } = await api.post(`/api/jobs/${jobId}/retry`);
+    setJobs(prev => prev.map(j => j._id === jobId ? { ...j, status: 'queued' } : j));
+    return data;
+  }, []);
+
   return {
     jobs, loading, error, uploading,
-    uploadImage, deleteJob, refetch: fetchJobs
+    uploadImage, deleteJob, retryJob: retryJobFn, refetch: fetchJobs
   };
 }

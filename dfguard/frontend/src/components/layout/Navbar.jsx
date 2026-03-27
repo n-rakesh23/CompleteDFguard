@@ -1,13 +1,15 @@
 import { useState }                        from 'react';
 import { Link, useNavigate, useLocation }  from 'react-router-dom';
-import { Shield, Menu, X, Coins, LogOut, LayoutDashboard } from 'lucide-react';
+import { Shield, Menu, X, Coins, LogOut, LayoutDashboard, UserCircle, Sun, Moon } from 'lucide-react';
 import { useAuth }    from '../../hooks/useAuth';
 import { useCredits } from '../../hooks/useCredits';
+import { useTheme }   from '../../context/ThemeContext';
 import toast          from 'react-hot-toast';
 
 export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
   const { displayBalance }                = useCredits();
+  const { theme, toggleTheme }            = useTheme();
   const [mobileOpen,  setMobileOpen]      = useState(false);
   const [profileOpen, setProfileOpen]     = useState(false);
   const navigate  = useNavigate();
@@ -122,6 +124,20 @@ export default function Navbar() {
                     >
                       <LayoutDashboard className="w-3 h-3" /> Dashboard
                     </Link>
+                    <Link
+                      to="/profile"
+                      className="flex items-center gap-2 text-xs text-slate-300 hover:text-brand-cyan transition-colors mb-3"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      <UserCircle className="w-3 h-3" /> Profile
+                    </Link>
+                    <button
+                      onClick={() => { toggleTheme(); setProfileOpen(false); }}
+                      className="w-full text-left text-xs text-slate-300 hover:text-brand-cyan flex items-center gap-2 transition-colors mb-3"
+                    >
+                      {theme === 'dark' ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
+                      {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                    </button>
                     <button
                       onClick={handleLogout}
                       className="w-full text-left text-xs text-red-400 hover:text-red-300 flex items-center gap-2 transition-colors"

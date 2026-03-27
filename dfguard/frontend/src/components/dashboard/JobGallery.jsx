@@ -1,4 +1,4 @@
-import { Download, Clock, CheckCircle, XCircle, Loader2, Trash2, ShieldCheck, X } from 'lucide-react';
+import { Download, Clock, CheckCircle, XCircle, Loader2, Trash2, ShieldCheck, X, RotateCcw } from 'lucide-react';
 
 const statusConfig = {
   queued:     { color: 'text-yellow-400',  bg: 'bg-yellow-400/10',  border: 'border-yellow-400/20',  icon: Clock,        label: 'Queued'     },
@@ -7,7 +7,7 @@ const statusConfig = {
   failed:     { color: 'text-red-400',     bg: 'bg-red-400/10',     border: 'border-red-400/20',     icon: XCircle,      label: 'Failed'     }
 };
 
-function JobCard({ job, onDelete }) {
+function JobCard({ job, onDelete, onRetry }) {
   const cfg          = statusConfig[job.status] || statusConfig.queued;
   const Icon         = cfg.icon;
   const isProcessing = job.status === 'processing' || job.status === 'queued';
@@ -71,6 +71,17 @@ function JobCard({ job, onDelete }) {
           </button>
         )}
 
+        {/* Retry button — only for failed jobs */}
+        {job.status === 'failed' && (
+          <button
+            onClick={() => onRetry(job._id)}
+            className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 border border-white/10 hover:bg-brand-cyan/20 hover:border-brand-cyan/30 transition-all touch-manipulation"
+            title="Retry job (costs 10 credits)"
+          >
+            <RotateCcw className="w-3 h-3 text-slate-400 hover:text-brand-cyan" />
+          </button>
+        )}
+
         {/* Status pill overlay */}
         <div className={`absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${cfg.bg} ${cfg.border} border ${cfg.color}`}>
           <Icon className={`w-2.5 h-2.5 ${isProcessing ? 'animate-spin' : ''}`} />
@@ -91,7 +102,7 @@ function JobCard({ job, onDelete }) {
   );
 }
 
-export default function JobGallery({ jobs, onDelete }) {
+export default function JobGallery({ jobs, onDelete, onRetry }) {
   if (jobs.length === 0) {
     return (
       <div
@@ -124,7 +135,7 @@ export default function JobGallery({ jobs, onDelete }) {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         {jobs.map(job => (
-          <JobCard key={job._id} job={job} onDelete={onDelete} />
+          <JobCard key={job._id} job={job} onDelete={onDelete} onRetry={onRetry} />
         ))}
       </div>
     </div>

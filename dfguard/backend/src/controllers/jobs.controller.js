@@ -185,10 +185,55 @@ const deleteJob = async (req, res, next) => {
     }
 };
 
+/**
+ * POST /api/jobs/:id/retry
+ * Retry a failed job — deducts credits and re-queues to SQS
+ */
+const retryJob = async (req, res, next) => {
+    try {
+        const job = await Job.findOne({ _id: req.params.id, userId: req.user._id });
+
+        if (!job) return res.status(404).json({ error: 'Job not found.' });
+        if (job.status !== 'failed') return res.status(400).json({ error: 'Only failed jobs can be retried.' });
+
+        const credit = await Credit.findOne({ userId: req.user._id });
+        if (!credit) return res.status(500).json({ error: 'Credit record not found.' });
+
+        await credit.resetIfNeeded();
+
+        if (req.user.plan !== 'pro' && credit.balance < 10) {
+            return res.status(402).json({ error: 'Insufficient credits.', balance: credit.balance });
+        }
+
+        // Deduct credits
+        if (req.user.plan !== 'pro') {
+            credit.balance -= 10;
+            await credit.save();
+        }
+
+        // Re-queue to SQS
+        await sendJob({
+            jobId:      job._id.toString(),
+            userId:     job.userId.toString(),
+            inputS3Key: job.inputS3Key
+        });
+
+        // Reset job status
+        job.status     = 'queued';
+        job.retryCount = (job.retryCount || 0) + 1;
+        await job.save();
+
+        res.json({ job, credits: req.user.plan === 'pro' ? null : credit.balance });
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     createUploadJob,
     confirmUpload,
     getJobs,
     getJob,
-    deleteJob
+    deleteJob,
+    retryJob
 };

@@ -5,6 +5,7 @@ import Pricing       from './pages/Pricing';
 import Login         from './pages/Login';
 import Signup        from './pages/Signup';
 import Dashboard     from './pages/Dashboard';
+import Profile       from './pages/Profile';
 import NotFound      from './pages/NotFound';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 
@@ -19,6 +20,11 @@ export default function App() {
       <Route path="/dashboard" element={
         <ProtectedRoute>
           <Dashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
         </ProtectedRoute>
       } />
       <Route path="*"          element={<NotFound />} />

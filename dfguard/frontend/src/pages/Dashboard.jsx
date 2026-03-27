@@ -14,7 +14,7 @@ import { updateProfile }    from '../lib/api';
 
 export default function Dashboard() {
   const { user, isAuthenticated, loading: authLoading, userName, updateName } = useAuth();
-  const { jobs, loading: jobsLoading, uploading, uploadImage, deleteJob } = useJobs();
+  const { jobs, loading: jobsLoading, uploading, uploadImage, deleteJob, retryJob } = useJobs();
   const { credits, displayBalance, refetch: refetchCredits }              = useCredits();
   const navigate = useNavigate();
 
@@ -57,6 +57,12 @@ export default function Dashboard() {
     if (!authLoading && !isAuthenticated) navigate('/login');
   }, [authLoading, isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
+
   if (authLoading || (!isAuthenticated && authLoading)) return <FullPageSpinner />;
 
   const handleUpload = async (file) => {
@@ -90,6 +96,20 @@ export default function Dashboard() {
       }
     } catch {
       toast.error('Could not delete job.');
+    }
+  };
+
+  const handleRetry = async (jobId) => {
+    try {
+      await retryJob(jobId);
+      await refetchCredits();
+      toast.success('Job re-queued for processing!');
+    } catch (err) {
+      if (err.status === 402) {
+        toast.error('Insufficient credits to retry.');
+      } else {
+        toast.error('Could not retry job.');
+      }
     }
   };
 
@@ -217,7 +237,7 @@ export default function Dashboard() {
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full animate-spin border-4 border-white/5 border-t-brand-cyan" />
               </div>
             ) : (
-              <JobGallery jobs={jobs} onDelete={handleDelete} />
+              <JobGallery jobs={jobs} onDelete={handleDelete} onRetry={handleRetry} />
             )}
           </div>
         </div>

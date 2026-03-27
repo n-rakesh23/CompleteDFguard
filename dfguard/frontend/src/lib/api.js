@@ -145,4 +145,7 @@ export const getPaymentHistory = () => api.get('/api/payments/history');
 /** PUT /api/auth/profile */
 export const updateProfile = (data) => api.put('/api/auth/profile', data);
 
+/** POST /api/jobs/:id/retry */
+export const retryJob = (id) => api.post(`/api/jobs/${id}/retry`);
+
 export default api;

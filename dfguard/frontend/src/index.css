@@ -220,6 +220,16 @@
   animation: shimmer 4s linear infinite;
 }
 
+/* ── Light Mode ── */
+body.light-mode {
+  filter: invert(1) hue-rotate(180deg);
+}
+body.light-mode img,
+body.light-mode video,
+body.light-mode .no-invert {
+  filter: invert(1) hue-rotate(180deg);
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar       { width: 5px; }
 ::-webkit-scrollbar-track { background: #050814; }
