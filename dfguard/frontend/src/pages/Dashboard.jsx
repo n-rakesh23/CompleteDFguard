@@ -1,6 +1,6 @@
-import { useEffect }        from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate }      from 'react-router-dom';
-import { ShieldCheck, Coins, Zap, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Coins, Zap, ArrowRight, Pencil, Check, X } from 'lucide-react';
 import { Link }             from 'react-router-dom';
 import toast                from 'react-hot-toast';
 import Navbar               from '../components/layout/Navbar';
@@ -10,12 +10,48 @@ import { useAuth }          from '../hooks/useAuth';
 import { useJobs }          from '../hooks/useJobs';
 import { useCredits }       from '../hooks/useCredits';
 import { FullPageSpinner }  from '../components/ui/Spinner';
+import { updateProfile }    from '../lib/api';
 
 export default function Dashboard() {
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { user, isAuthenticated, loading: authLoading, userName, updateName } = useAuth();
   const { jobs, loading: jobsLoading, uploading, uploadImage, deleteJob } = useJobs();
   const { credits, displayBalance, refetch: refetchCredits }              = useCredits();
   const navigate = useNavigate();
+
+  const [editingName, setEditingName]   = useState(false);
+  const [nameInput,   setNameInput]     = useState('');
+  const [savingName,  setSavingName]    = useState(false);
+
+  const handleEditName = () => {
+    setNameInput(userName);
+    setEditingName(true);
+  };
+
+  const handleCancelName = () => {
+    setEditingName(false);
+    setNameInput('');
+  };
+
+  const handleSaveName = async () => {
+    const trimmed = nameInput.trim();
+    if (!trimmed || trimmed.length < 2) {
+      toast.error('Name must be at least 2 characters.');
+      return;
+    }
+    setSavingName(true);
+    try {
+      await Promise.all([
+        updateName(trimmed),
+        updateProfile({ fullName: trimmed })
+      ]);
+      toast.success('Name updated!');
+      setEditingName(false);
+    } catch {
+      toast.error('Could not update name. Try again.');
+    } finally {
+      setSavingName(false);
+    }
+  };
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) navigate('/login');
@@ -52,8 +88,6 @@ export default function Dashboard() {
     }
   };
 
-  const userName = user?.username?.split('@')[0] || 'Guardian';
-
   return (
     <div className="min-h-screen flex flex-col text-white overflow-x-hidden" style={{ background: '#050814' }}>
       {/* BG */}
@@ -74,8 +108,33 @@ export default function Dashboard() {
                 Vault Active
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-1 md:mb-2 truncate">
-              Welcome, <span className="text-gradient">{userName}</span>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-1 md:mb-2">
+              Welcome,{' '}
+              {editingName ? (
+                <span className="inline-flex items-center gap-2">
+                  <input
+                    autoFocus
+                    value={nameInput}
+                    onChange={e => setNameInput(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') handleSaveName(); if (e.key === 'Escape') handleCancelName(); }}
+                    className="text-gradient bg-transparent border-b border-brand-cyan outline-none w-48 sm:w-64"
+                    maxLength={50}
+                  />
+                  <button onClick={handleSaveName} disabled={savingName} className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                    <Check className="w-5 h-5" />
+                  </button>
+                  <button onClick={handleCancelName} className="text-slate-500 hover:text-slate-300 transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-2">
+                  <span className="text-gradient">{userName}</span>
+                  <button onClick={handleEditName} className="text-slate-600 hover:text-brand-cyan transition-colors">
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                </span>
+              )}
             </h1>
             <p className="text-slate-500 text-xs sm:text-sm max-w-md leading-relaxed">
               Upload media to inject adversarial noise. Each protection costs 10 credits.

@@ -142,4 +142,7 @@ export const verifyPayment = (data) => api.post('/api/payments/verify', data);
 /** GET /api/payments/history */
 export const getPaymentHistory = () => api.get('/api/payments/history');
 
+/** PUT /api/auth/profile */
+export const updateProfile = (data) => api.put('/api/auth/profile', data);
+
 export default api;
