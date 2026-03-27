@@ -151,6 +151,14 @@ export default function Navbar() {
             </>
           ) : (
             <div className="flex items-center gap-2">
+              <button
+                onClick={toggleTheme}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-brand-cyan transition-colors"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+              </button>
               <Link
                 to="/login"
                 className="text-xs font-medium px-4 py-2 text-slate-300 hover:text-brand-cyan transition-colors"
@@ -245,6 +253,13 @@ export default function Navbar() {
               >
                 Log In
               </Link>
+              <button
+                onClick={() => { toggleTheme(); setMobileOpen(false); }}
+                className="w-full text-center py-3 rounded-full text-sm border border-white/10 text-slate-300 flex items-center justify-center gap-2"
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              </button>
             </>
           )}
         </div>
