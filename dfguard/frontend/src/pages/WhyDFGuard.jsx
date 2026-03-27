@@ -141,13 +141,13 @@ export default function WhyDFGuard() {
   return (
     <div className="min-h-screen flex flex-col text-white overflow-x-hidden" style={{ background: '#050814' }}>
       <div className="fixed inset-0 bg-grid pointer-events-none" />
-      <div className="glow-orb w-[500px] h-[500px] bg-red-600/[0.06] top-[-100px] right-[-100px]" />
-      <div className="glow-orb w-[400px] h-[400px] bg-cyan-500/[0.06] bottom-[10%] left-[-100px]" />
+      <div className="glow-orb w-[500px] h-[500px] bg-red-600/[0.06] top-[-100px] right-[-100px] z-0" />
+      <div className="glow-orb w-[400px] h-[400px] bg-cyan-500/[0.06] bottom-[10%] left-[-100px] z-0" />
 
       <Navbar />
 
       {/* Hero */}
-      <header className="relative pt-28 sm:pt-36 md:pt-48 pb-10 md:pb-14 px-4 sm:px-6 text-center z-10 animate-fade-up max-w-4xl mx-auto w-full">
+      <header className="relative pt-28 sm:pt-36 md:pt-48 pb-10 md:pb-14 px-4 sm:px-6 text-center z-10 animate-fade-up max-w-4xl mx-auto w-full" style={{ position: 'relative', zIndex: 10 }}>
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest mb-6 border"
           style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: '#f87171' }}>
           <AlertTriangle className="w-3 h-3" /> Awareness & Safety Report
@@ -160,7 +160,7 @@ export default function WhyDFGuard() {
         </p>
       </header>
 
-      <main className="flex-grow max-w-5xl mx-auto px-4 sm:px-6 pb-16 md:pb-24 z-10 w-full space-y-16 md:space-y-24">
+      <main className="flex-grow max-w-5xl mx-auto px-4 sm:px-6 pb-16 md:pb-24 z-10 relative w-full space-y-16 md:space-y-24">
 
         {/* Stats */}
         <section>
