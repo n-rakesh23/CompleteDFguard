@@ -171,15 +171,16 @@ const deleteJob = async (req, res, next) => {
             return res.status(404).json({ error: 'Job not found.' });
         }
 
-        // Refund credits if job was queued (never processed)
-        if (job.status === 'queued' && req.user.plan !== 'pro') {
+        // Refund credits if job was queued or processing (not yet completed)
+        const refundable = job.status === 'queued' || job.status === 'processing';
+        if (refundable && req.user.plan !== 'pro') {
             await Credit.findOneAndUpdate(
                 { userId: req.user._id },
                 { $inc: { balance: 10 } }
             );
         }
 
-        res.json({ message: 'Job deleted.', refunded: job.status === 'queued' });
+        res.json({ message: 'Job deleted.', refunded: refundable });
     } catch (err) {
         next(err);
     }
