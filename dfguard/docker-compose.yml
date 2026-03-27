@@ -1,0 +1,107 @@
+# ============================================================
+# docker-compose.yml — Local Development
+# Runs MongoDB + Redis locally so you don't need AWS for dev
+#
+# Usage:
+#   docker-compose up -d        # start
+#   docker-compose down         # stop
+#   docker-compose logs -f      # view logs
+# ============================================================
+
+version: '3.9'
+
+services:
+
+  # ── MongoDB ───────────────────────────────────────────────
+  mongo:
+    image: mongo:7.0
+    container_name: dfguard-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dfguard_user
+      MONGO_INITDB_ROOT_PASSWORD: dfguard_pass
+      MONGO_INITDB_DATABASE:      dfguard
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/dfguard --quiet
+      interval: 10s
+      timeout:  5s
+      retries:  5
+
+  # ── Redis ─────────────────────────────────────────────────
+  redis:
+    image: redis:7.2-alpine
+    container_name: dfguard-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout:  5s
+      retries:  5
+
+  # ── Backend ───────────────────────────────────────────────
+  backend:
+    build:
+      context:    ./backend
+      dockerfile: Dockerfile.dev
+    container_name: dfguard-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      NODE_ENV:              development
+      PORT:                  8000
+      MONGODB_URI:           mongodb://dfguard_user:dfguard_pass@mongo:27017/dfguard?authSource=admin
+      REDIS_URL:             redis://redis:6379
+      FRONTEND_URL:          http://localhost:5173
+      AWS_REGION:            ap-south-1
+      AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      COGNITO_USER_POOL_ID:  ${COGNITO_USER_POOL_ID}
+      COGNITO_CLIENT_ID:     ${COGNITO_CLIENT_ID}
+      S3_BUCKET:             ${S3_BUCKET}
+      SQS_QUEUE_URL:         ${SQS_QUEUE_URL}
+      SNS_TOPIC_ARN:         ${SNS_TOPIC_ARN}
+      RAZORPAY_KEY_ID:       ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET:   ${RAZORPAY_KEY_SECRET}
+      USE_SECRETS_MANAGER:   "false"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Frontend ──────────────────────────────────────────────
+  frontend:
+    build:
+      context:    ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: dfguard-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL:               http://localhost:8000
+      VITE_AWS_REGION:            ap-south-1
+      VITE_COGNITO_USER_POOL_ID:  ${COGNITO_USER_POOL_ID}
+      VITE_COGNITO_CLIENT_ID:     ${COGNITO_CLIENT_ID}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+  redis_data:

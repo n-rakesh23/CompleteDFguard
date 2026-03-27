@@ -1,0 +1,24 @@
+# ============================================================
+# terraform.tfvars.example
+# ============================================================
+# 1. Copy this file:  cp terraform.tfvars.example terraform.tfvars
+# 2. Fill in your values below
+# 3. NEVER commit terraform.tfvars to git (it's in .gitignore)
+# ============================================================
+
+aws_region        = "ap-south-1"
+project_name      = "dfguard"
+environment       = "prod"
+
+# Your domain bought from Hostinger
+domain_name       = "yourdomain.com"
+frontend_url      = "https://yourdomain.com"
+
+# EC2 Key Pair name (create in AWS Console → EC2 → Key Pairs first)
+ec2_key_name      = "dfguard-key"
+
+# t2.micro = Free Tier (750 hrs/month for 12 months)
+ec2_instance_type = "t2.micro"
+
+# Where CloudWatch alarms send emails
+alert_email       = "you@gmail.com"
