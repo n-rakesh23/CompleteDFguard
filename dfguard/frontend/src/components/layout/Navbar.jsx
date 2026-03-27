@@ -210,6 +210,20 @@ export default function Navbar() {
               >
                 Enter Vault
               </Link>
+              <Link
+                to="/profile"
+                onClick={() => setMobileOpen(false)}
+                className="w-full text-center py-3 rounded-full text-sm border border-brand-cyan/20 text-brand-cyan flex items-center justify-center gap-2"
+              >
+                <UserCircle className="w-4 h-4" /> Profile
+              </Link>
+              <button
+                onClick={() => { toggleTheme(); setMobileOpen(false); }}
+                className="w-full text-center py-3 rounded-full text-sm border border-white/10 text-slate-300 flex items-center justify-center gap-2"
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              </button>
               <button onClick={handleLogout} className="text-red-400 text-xs mt-2">
                 Logout
               </button>
