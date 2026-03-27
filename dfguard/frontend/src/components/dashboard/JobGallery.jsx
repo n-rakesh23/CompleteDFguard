@@ -60,12 +60,12 @@ function JobCard({ job, onDelete, onRetry }) {
           </div>
         )}
 
-        {/* Remove from queue button — only for queued jobs */}
-        {job.status === 'queued' && (
+        {/* Remove button — for queued and processing jobs */}
+        {(job.status === 'queued' || job.status === 'processing') && (
           <button
             onClick={() => onDelete(job._id, job.status)}
             className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 border border-white/10 hover:bg-red-500/20 hover:border-red-500/30 transition-all touch-manipulation"
-            title="Remove from queue (refunds 10 credits)"
+            title="Remove photo (refunds 10 credits)"
           >
             <X className="w-3 h-3 text-slate-400 hover:text-red-400" />
           </button>
