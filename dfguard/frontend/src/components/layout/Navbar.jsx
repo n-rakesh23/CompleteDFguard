@@ -18,6 +18,7 @@ export default function Navbar() {
   const navLinks = [
     { to: '/',         label: 'Platform' },
     { to: '/features', label: 'Models'   },
+    { to: '/why',      label: 'Why Us'   },
     { to: '/pricing',  label: 'Pricing'  }
   ];
 
